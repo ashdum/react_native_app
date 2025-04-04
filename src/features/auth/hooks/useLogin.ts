@@ -10,6 +10,16 @@ export const useLogin = () => {
   const login = useAuthStore((state) => state.login);
 
   const handleLogin = async () => {
+    // Проверка на пустые поля
+    if (!username.trim()) {
+      setError('Поле логина обязательно для заполнения');
+      return;
+    }
+    if (!password.trim()) {
+      setError('Поле пароля обязательно для заполнения');
+      return;
+    }
+
     setLoading(true);
     setError(null);
     try {
@@ -31,5 +41,6 @@ export const useLogin = () => {
     handleLogin,
     loading,
     error,
+    setError,
   };
 };

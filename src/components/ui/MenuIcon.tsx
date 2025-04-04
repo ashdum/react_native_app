@@ -4,16 +4,32 @@ import { Menu, X } from 'lucide-react-native';
 import { colors } from '@/utils/constants/colors';
 import { router } from 'expo-router';
 import { routes, AppRoute } from '@/utils/constants/routes';
-import { useAuthStore } from '@/features/auth/store'; 
+import { useAuthStore } from '@/features/auth/store';
+
+interface MenuItem {
+  id: string;
+  title: string;
+  route: AppRoute;
+}
+
+const menuItems: MenuItem[] = [
+  { id: '1', title: 'Диспетчерская служба', route: routes.GRID },
+];
 
 export const MenuIcon = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const logout = useAuthStore((state) => state.logout); 
+  const logout = useAuthStore((state) => state.logout);
+  const user = useAuthStore((state) => state.user); // Получаем данные пользователя
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navigate = (route: AppRoute) => {
     router.push(route);
+    setIsOpen(false);
+  };
+
+  const handleLogout = async () => {
+    await logout();
     setIsOpen(false);
   };
 
@@ -24,23 +40,30 @@ export const MenuIcon = () => {
       </TouchableOpacity>
       {isOpen && (
         <View style={styles.dropdown}>
-          <TouchableOpacity onPress={() => navigate(routes.MENU)} style={styles.item}>
-            <Text style={styles.itemText}>Menu</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate(routes.GRID)} style={styles.item}>
-            <Text style={styles.itemText}>Data Grid</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigate(routes.CAMERA)} style={styles.item}>
-            <Text style={styles.itemText}>Camera</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={async () => {
-              await logout(); // Используем logout напрямую
-              setIsOpen(false);
-            }}
-            style={styles.item}
-          >
-            <Text style={styles.itemText}>Logout</Text>
+          {/* Отображение данных пользователя */}
+          {user ? (
+            <View style={styles.userInfo}>
+              <Text style={styles.userText}>{user.username}</Text>
+              <Text style={styles.userText}>{`${user.firstName} ${user.lastName}`}</Text>
+            </View>
+          ) : (
+            <Text style={styles.userText}>Загрузка...</Text>
+          )}
+
+          {/* Пункты меню */}
+          {menuItems.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              onPress={() => navigate(item.route)}
+              style={styles.item}
+            >
+              <Text style={styles.itemText}>{item.title}</Text>
+            </TouchableOpacity>
+          ))}
+
+          {/* Кнопка выхода */}
+          <TouchableOpacity onPress={handleLogout} style={styles.item}>
+            <Text style={[styles.itemText, { color: colors.error }]}>Выйти</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -49,7 +72,7 @@ export const MenuIcon = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { position: 'absolute', top: 20, right: 20 },
+  container: { zIndex: 1000 }, // Высокий zIndex для контейнера
   dropdown: {
     position: 'absolute',
     top: 30,
@@ -62,6 +85,20 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     padding: 10,
+    width: 200,
+    zIndex: 1001, // Еще более высокий zIndex для выпадающего меню
+  },
+  userInfo: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.lightGray,
+    marginBottom: 8,
+  },
+  userText: {
+    fontSize: 14,
+    color: colors.text,
+    fontFamily: 'Inter-Regular',
   },
   item: { paddingVertical: 8, paddingHorizontal: 12 },
   itemText: { fontSize: 16, color: colors.text, fontFamily: 'Inter-Regular' },

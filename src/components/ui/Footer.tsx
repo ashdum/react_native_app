@@ -1,18 +1,25 @@
-import { Linking, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { colors } from '@/utils/constants/colors';
 
 export const Footer = () => (
-  <TouchableOpacity onPress={() => Linking.openURL('https://growfactor.ru/')}>
-    <Text style={styles.text}>created by growfactor</Text>
-  </TouchableOpacity>
+  <View style={styles.container}>
+    <TouchableOpacity onPress={() => Linking.openURL('https://growfactor.ru/')}>
+      <Text style={styles.text}>created by growfactor</Text>
+    </TouchableOpacity>
+  </View>
 );
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+  },
   text: {
     fontSize: 12,
     color: colors.secondary,
     textAlign: 'center',
-    paddingVertical: 10,
     fontFamily: 'Inter-Regular',
   },
 });

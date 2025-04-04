@@ -5,12 +5,30 @@ import { SplashScreen } from 'expo-router';
 import { useEffect } from 'react';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { colors } from '@/utils/constants/colors';
+import { View } from 'react-native';
+import { LogoHeader } from '@/components/shared/LogoHeader';
+import { MenuIcon } from '@/components/ui/MenuIcon';
 
 const screenOptions = {
     headerStyle: { backgroundColor: '#A3DFFA' },
     headerTintColor: colors.text,
     headerTitleStyle: { fontFamily: 'Inter-Bold', fontSize: 20 },
     cardStyle: { backgroundColor: colors.background },
+    header: () => (
+        <View
+            style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingHorizontal: 20,
+                paddingTop: 20,
+                backgroundColor: '#A3DFFA',
+            }}
+        >
+            <LogoHeader />
+            <MenuIcon />
+        </View>
+    ),
 };
 
 export default function RootNavigator() {
@@ -30,8 +48,6 @@ export default function RootNavigator() {
     if (!fontsLoaded && !fontError) {
         return null;
     }
-
-    /*  console.log('RootNavigator rendered, available routes:', Stack.router?.routes); // Отладка */
 
     return (
         <>

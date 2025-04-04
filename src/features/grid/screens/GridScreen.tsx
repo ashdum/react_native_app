@@ -3,12 +3,12 @@ import { View, TouchableOpacity, Text, StyleSheet, Switch } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 import { gridRepository } from '@/api/repositories/grid';
 import { Footer } from '@/components/ui/Footer';
-import { Logo } from '@/components/shared/Logo';
 import { Filters } from '../components/Filters';
 import { GridData, Filters as FilterType } from '../types';
 import { colors } from '@/utils/constants/colors';
 import { safeNavigate } from '@/utils/navigation';
 import { routes } from '@/utils/constants/routes';
+import { BottomNav } from '@/components/ui/BottomNav';
 
 export default function GridScreen() {
     const [data, setData] = useState<GridData[]>([]);
@@ -69,7 +69,6 @@ export default function GridScreen() {
 
     return (
         <View style={styles.container}>
-            <Logo />
             <TouchableOpacity style={styles.filterButton} onPress={toggleFilter}>
                 <Text style={styles.filterButtonText}>
                     {isFilterVisible ? 'Скрыть фильтр' : 'Показать фильтр'}
@@ -87,6 +86,7 @@ export default function GridScreen() {
                 keyExtractor={(item) => item.id}
             />
             <Footer />
+            <BottomNav />
         </View>
     );
 }

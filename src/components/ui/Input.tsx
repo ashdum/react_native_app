@@ -28,6 +28,8 @@ export const Input: React.FC<InputProps> = ({
       onChangeText={onChangeText}
       secureTextEntry={secureTextEntry}
       placeholderTextColor={colors.lightGray}
+      autoCapitalize="none"
+      autoCorrect={false}
     />
     {showToggle && toggleVisibility && (
       <TouchableOpacity onPress={toggleVisibility} style={styles.toggle}>
